@@ -11,8 +11,13 @@ GLMmodel*rightarm=NULL;
 GLMmodel*rightuparm=NULL;
 GLMmodel*rightleg=NULL;
 GLMmodel*rightupleg=NULL;
-int show[10] = {1,0,1,1,0,1,0,0,0,0};
+int show[10] = {1,0,1,1,0,0,0,0,0,0};
 int ID=0;
+FILE*fout=NULL;
+FILE*fin=NULL;
+float teapotX=0, teapotY=0;
+
+float angle[20]={};
 void keyboard(unsigned char key,int x,int y){
     if(key=='0') ID=0;
     if(key=='1') ID=1;
@@ -24,12 +29,28 @@ void keyboard(unsigned char key,int x,int y){
     if(key=='7') ID=7;
     if(key=='8') ID=8;
     if(key=='9') ID=9;
+
+    if(key=='s')
+    {
+        if(fout==NULL) fout=fopen("motion.txt","w");
+        for(int i=0;i<20;i++)
+        {
+            fprintf(fout,"%.2f",angle[i]);
+        }
+        fprintf(fout,"\n");
+    }
+    else if(key=='r')
+    {
+        if(fin==NULL) fin=fopen("motion.txt","r");
+        for(int i=0;i<20;i++)
+        {
+            fscanf(fin,"%f",&angle[i]);
+        }
+        glutPostRedisplay();
+    }
     glutPostRedisplay();
 }
-FILE*fout=NULL;
-FILE*fin=NULL;
-float teapotX=0,teapotY=0;
-float angle=0,angle2=0,angle3=0;
+
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -55,44 +76,43 @@ void display()
         else glColor3f(1,1,1);
         if(show[1]) glmDraw(head, GLM_MATERIAL);
 
-        ///¥ª¤â
+        ///left hand
         glPushMatrix();
             //glTranslatef(teapotX,teapotY,0);
             glTranslatef(-1.333333, +0.380000, 0);
-            glRotatef(angle,0,0,1);
+            glRotatef(angle[2],0,0,1);
             glTranslatef(1.333333, -0.380000, 0);
 
-            if(ID==3) glColor3f(1,0,0);
+            if(ID==2) glColor3f(1,0,0);
             else glColor3f(1,1,1);
-            if(show[3]) glmDraw(leftuparm, GLM_MATERIAL);
+            if(show[2]) glmDraw(leftuparm, GLM_MATERIAL);
             glPushMatrix();
                 glTranslatef(-1.906666, +0.060000, 0);
-                glRotatef(angle,0,0,1);
+                glRotatef(angle[3],0,0,1);
                 glTranslatef(1.906666, -0.060000, 0);
                 //glTranslatef(teapotX, teapotY, 0);
 
-                if(ID==2) glColor3f(1,0,0);
+                if(ID==3) glColor3f(1,0,0);
                 else glColor3f(1,1,1);
-                if(show[2]) glmDraw(leftarm, GLM_MATERIAL);
+                if(show[3]) glmDraw(leftarm, GLM_MATERIAL);
 
             glPopMatrix();
         glPopMatrix();
         glPushMatrix();
 
-        ///¥k¸}
-        glPushMatrix();
-            glTranslatef(teapotX,teapotY,0);
-            glTranslatef(-0.553333, -1.506666, 0);
-            glRotatef()
-            glTranslatef(0.553333, 1.506666, 0);
-            if(ID==5) glColor3f(1,0,0);
-            else glColor3f(1,1,1);
-            if(show[5]) glmDraw(leftupleg, GLM_MATERIAL);
-        glPopMatrix();
 
-            if(ID==4) glColor3f(1,0,0);
-            else glColor3f(1,1,1);
-            if(show[4]) glmDraw(leftleg, GLM_MATERIAL);
+
+                if(ID==4) glColor3f(1,0,0);
+                else glColor3f(1,1,1);
+                if(show[4]) glmDraw(leftupleg, GLM_MATERIAL);
+
+
+
+                if(ID==5) glColor3f(1,0,0);
+                else glColor3f(1,1,1);
+                if(show[5]) glmDraw(leftleg, GLM_MATERIAL);
+
+        ///
 
                 if(ID==6) glColor3f(1,0,0);
                 else glColor3f(1,1,1);
@@ -120,9 +140,9 @@ int oldX=0, oldY=0;
 void motion(int x,int y){
     teapotX += (x-oldX)/150.0;
     teapotY -= (y-oldY)/150.0;
+    angle[ID] +=(x - oldX);
     oldX = x;
     oldY = y;
-    angle =x;
     printf("glTranslatef(%f, %f, 0);\n",teapotX,teapotY);
     glutPostRedisplay();
 }
@@ -132,7 +152,7 @@ void mouse(int button,int state,int x,int y)
     {
         oldX = x;
         oldY = y;
-        angle = x;
+        ///angle = x;
     }
     display();
 }

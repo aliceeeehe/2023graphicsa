@@ -1,8 +1,6 @@
 # depslib dependency file v1.0
-1684902270 source:c:\users\administrator\desktop\2023graphicsa\final_project\main.cpp
-	<stdio.h>
-	<GL/glut.h>
-	"glm.h"
+1684897615 source:c:\users\administrator\desktop\2023graphicsa\final_project\freeglut\week15-2_glulookat\main.cpp
+	<Gl/glut.h>
 
 1684893601 c:\users\administrator\desktop\2023graphicsa\final_project\freeglut\include\gl\glut.h
 	"freeglut_std.h"
@@ -17,15 +15,4 @@
 	<GL/gl.h>
 	<GL/glu.h>
 	<stdlib.h>
-
-1684893601 source:c:\users\administrator\desktop\2023graphicsa\final_project\glm.cpp
-	<math.h>
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-	<assert.h>
-	"glm.h"
-
-1684893601 c:\users\administrator\desktop\2023graphicsa\final_project\glm.h
-	<GL/glut.h>
 
