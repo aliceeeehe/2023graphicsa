@@ -6,6 +6,7 @@
 GLMmodel * head = NULL;
 GLMmodel * body = NULL; ///GLMmodel * gundam = NULL;
 GLMmodel * arm1 = NULL, * arm2 = NULL;
+GLMmodel * hand1 = NULL, * hand2 = NULL;
 int myTexture(char * filename)
 {
     IplImage * img = cvLoadImage(filename); ///OpenCV讀圖
@@ -59,10 +60,36 @@ void display() {
             glPopMatrix();
 
             glPushMatrix();
-                glTranslatef(teapotX, teapotY, 0);
+                glTranslatef(-3.800 , +21.200 , 0 );
+                //glRotatef(angle, 0, 1, 0);
+                //glRotatef(angle2, 1, 0, 0);
+                glTranslatef(3.800 , -21.200 , 0 );
+                ///glTranslatef(teapotX, teapotY, 0);
                 glmDraw(arm1, GLM_MATERIAL | GLM_TEXTURE);
+                glPushMatrix();
+                    glTranslatef(-4.300 , +18.600 , 0 );
+                    glRotatef(angle, 0, 1, 0);
+                    glRotatef(angle2, 1, 0, 0);
+                    glTranslatef(4.300 , -18.600 , 0 );
+                    glmDraw(hand1, GLM_MATERIAL | GLM_TEXTURE);
+                glPopMatrix();
             glPopMatrix();
 
+            glPushMatrix();
+                glTranslatef(+3.800 , +21.200 , 0 );
+                //glRotatef(angle, 0, 1, 0);
+                //glRotatef(angle2, 1, 0, 0);
+                glTranslatef(-3.800 , -21.200 , 0 );
+                ///glTranslatef(teapotX, teapotY, 0);
+                glmDraw(arm2, GLM_MATERIAL | GLM_TEXTURE);
+                glPushMatrix();
+                    glTranslatef(+4.300 , +18.600 , 0 );
+                    glRotatef(angle, 0, 1, 0);
+                    glRotatef(angle2, 1, 0, 0);
+                    glTranslatef(-4.300 , -18.600 , 0 );
+                    glmDraw(hand2, GLM_MATERIAL | GLM_TEXTURE);
+                glPopMatrix();
+            glPopMatrix();
         glPopMatrix();
         glColor3f(0,1,0);///中心點的位置
         glutSolidTeapot( 0.01 );///中心點的位置
@@ -83,7 +110,9 @@ int main(int argc, char** argv)
     head = glmReadOBJ("model/head.obj");
     body = glmReadOBJ("model/body.obj"); ///gundam = glmReadOBJ("model/gundam.obj");
     arm1 = glmReadOBJ("model/arm1.obj");
-    arm2 = glmReadOBJ("model/arm1.obj");
+    arm2 = glmReadOBJ("model/arm2.obj");
+    hand1 = glmReadOBJ("model/hand1.obj");
+    hand2 = glmReadOBJ("model/hand2.obj");
     myTexture("model/Diffuse.jpg");
     glEnable(GL_DEPTH_TEST);
 

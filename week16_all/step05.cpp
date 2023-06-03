@@ -18,10 +18,10 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glPushMatrix();
         glColor3f(1,1,1);
-        glTranslatef(-0.420 , +0.047 , 0 );///glTranslatef(....);
-        glRotatef(angle, 0, 0, 1);
-        glTranslatef(0.420 , -0.047 , 0 );///glTranslatef(....);
-        ///glTranslatef(teapotX, teapotY, 0);
+        ///glTranslatef(-0.427 , 0.047 , 0 );///glTranslatef(....);
+        ///glRotatef(angle, 0, 0, 1);
+        ///glTranslatef(0.427 , -0.047 , 0 );///glTranslatef(....);
+        glTranslatef(teapotX, teapotY, 0);
         glutSolidTeapot( 0.3 );
     glPopMatrix();
 

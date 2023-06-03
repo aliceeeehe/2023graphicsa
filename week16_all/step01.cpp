@@ -2,8 +2,8 @@
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glColor3f(0,1,0);
-    glBegin(GL_POLYGON);
+    glColor3f(0,1,0);///背景顏色
+    glBegin(GL_POLYGON);///四個頂點<正方形>
         glVertex2f(0.5, 0.5);
         glVertex2f(-0.5, 0.5);
         glVertex2f(-0.5, -0.5);

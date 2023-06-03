@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <opencv/highgui.h> ///¨Ï¥Î OpenCV 2.1 ¤ñ¸ûÂ²³æ, ¥u­n¥Î High GUI §Y¥i
+#include <opencv/highgui.h> ///ä½¿ç”¨ OpenCV 2.1 æ¯”è¼ƒç°¡å–®, åªè¦ç”¨ High GUI å³å¯
 #include <opencv/cv.h>
 #include <GL/glut.h>
 #include "glm.h"
@@ -13,44 +13,24 @@ GLMmodel * knee1 = NULL, * knee2 = NULL;
 GLMmodel * foot1 = NULL, * foot2 = NULL;
 int myTexture(char * filename)
 {
-    IplImage * img = cvLoadImage(filename); ///OpenCVÅª¹Ï
-    cvCvtColor(img,img, CV_BGR2RGB); ///OpenCVÂà¦â±m (»İ­ncv.h)
-    glEnable(GL_TEXTURE_2D); ///1. ¶}±Ò¶K¹Ï¥\¯à
-    GLuint id; ///·Ç³Æ¤@­Ó unsigned int ¾ã¼Æ, ¥s ¶K¹ÏID
-    glGenTextures(1, &id); /// ²£¥ÍGenerate ¶K¹ÏID
-    glBindTexture(GL_TEXTURE_2D, id); ///¸j©wbind ¶K¹ÏID
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); /// ¶K¹Ï°Ñ¼Æ, ¶W¹L¥]¸Ëªº½d¹ÏT, ´N­«ÂĞ¶K¹Ï
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); /// ¶K¹Ï°Ñ¼Æ, ¶W¹L¥]¸Ëªº½d¹ÏS, ´N­«ÂĞ¶K¹Ï
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); /// ¶K¹Ï°Ñ¼Æ, ©ñ¤j®Éªº¤º´¡, ¥Î³ÌªñÂI
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); /// ¶K¹Ï°Ñ¼Æ, ÁY¤p®Éªº¤º´¡, ¥Î³ÌªñÂI
+    IplImage * img = cvLoadImage(filename); ///OpenCVè®€åœ–
+    cvCvtColor(img,img, CV_BGR2RGB); ///OpenCVè½‰è‰²å½© (éœ€è¦cv.h)
+    glEnable(GL_TEXTURE_2D); ///1. é–‹å•Ÿè²¼åœ–åŠŸèƒ½
+    GLuint id; ///æº–å‚™ä¸€å€‹ unsigned int æ•´æ•¸, å« è²¼åœ–ID
+    glGenTextures(1, &id); /// ç”¢ç”ŸGenerate è²¼åœ–ID
+    glBindTexture(GL_TEXTURE_2D, id); ///ç¶å®šbind è²¼åœ–ID
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); /// è²¼åœ–åƒæ•¸, è¶…éåŒ…è£çš„ç¯„åœ–T, å°±é‡è¦†è²¼åœ–
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); /// è²¼åœ–åƒæ•¸, è¶…éåŒ…è£çš„ç¯„åœ–S, å°±é‡è¦†è²¼åœ–
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); /// è²¼åœ–åƒæ•¸, æ”¾å¤§æ™‚çš„å…§æ’, ç”¨æœ€è¿‘é»
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); /// è²¼åœ–åƒæ•¸, ç¸®å°æ™‚çš„å…§æ’, ç”¨æœ€è¿‘é»
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img->width, img->height, 0, GL_RGB, GL_UNSIGNED_BYTE, img->imageData);
     return id;
 }
 FILE * fin = NULL;
 FILE * fout = NULL;
-float teapotX=0, teapotY=0, oldX=0, oldY=0;  ///¦³¤£¦P
+float teapotX=0, teapotY=0, oldX=0, oldY=0;  ///æœ‰ä¸åŒ
 float angle[20]={}, angle2[20]={};
-float OldAngle[20]={}, NewAngle[20]={};
-float OldAngle2[20]={}, NewAngle2[20]={};
 int ID=0; ///0:head, 1,2:left, 3,4:right hand, 5,6,7:left leg, 8,9,10:right leg
-void timer(int t) {
-    glutTimerFunc(20, timer, t+1);
-    if(t%50==0){ ///·sªº¶}©l,­nÅª·sªº°Ê§@
-        if(fin==NULL) fin = fopen("motion.txt", "r");
-        for(int i=0; i<20; i++){
-            OldAngle[i] = NewAngle[i];
-            OldAngle2[i] = NewAngle2[i];
-            fscanf(fin, "%f", &NewAngle[i] );
-            fscanf(fin, "%f", &NewAngle2[i] );
-        }
-    }
-    float alpha = (t%50) / 50.0;
-    for(int i=0; i<20; i++){
-        angle[i] = alpha * NewAngle[i] + (1-alpha) * OldAngle[i];
-        angle2[i] = alpha * NewAngle2[i] + (1-alpha) * OldAngle2[i];
-    }
-    glutPostRedisplay();
-}
 void keyboard(unsigned char key, int x, int y) {
     if(key=='0') ID=0;
     if(key=='1') ID=1;
@@ -62,25 +42,14 @@ void keyboard(unsigned char key, int x, int y) {
     if(key=='7') ID=7;
     if(key=='8') ID=8;
     if(key=='9') ID=9;
-    if(key=='s'){ ///save ¤T¿ï¤@: save, read, play (­«¶})
+    if(key=='s'){ ///save
         if(fout==NULL) fout = fopen("motion.txt", "w");
         for(int i=0; i<20; i++){
             fprintf(fout, "%.2f ", angle[i] );
             fprintf(fout, "%.2f ", angle2[i] );
         }
         fprintf(fout, "\n");
-        printf("§A¼g¤F1¦æ\n");
-    }
-    if(key=='r'){ ///read ¤T¿ï¤@: save, read, play (­«¶})
-        if(fin==NULL) fin = fopen("motion.txt", "r");
-        for(int i=0; i<20; i++){
-            fscanf(fin, "%f", &angle[i] );
-            fscanf(fin, "%f", &angle2[i] );
-        }
-        glutPostRedisplay();
-    }
-    if(key=='p'){ ///play ¤T¿ï¤@: save, read, play (­«¶})
-        glutTimerFunc(0, timer, 0);
+        printf("ä½ å¯«äº†1è¡Œ\n");
     }
 }
 void mouse(int button, int state, int x, int y) {
@@ -89,12 +58,12 @@ void mouse(int button, int state, int x, int y) {
 }
 
 void motion(int x, int y) {
-    teapotX += (x - oldX)/10.0; ///¦³¤£¦P
-    teapotY += (oldY - y)/10.0; ///¦³¤£¦P
+    teapotX += (x - oldX)/10.0; ///æœ‰ä¸åŒ
+    teapotY += (oldY - y)/10.0; ///æœ‰ä¸åŒ
     angle[ID] += x - oldX;
-    angle2[ID] += y - oldY; ///¦³¤£¦P
+    angle2[ID] += y - oldY; ///æœ‰ä¸åŒ
     oldX = x;
-    oldY = y; ///¦³¤£¦P
+    oldY = y; ///æœ‰ä¸åŒ
     ///printf("glTranslatef(%.3f , %.3f , 0 );\n", teapotX, teapotY);
     glutPostRedisplay();
 }
@@ -149,7 +118,7 @@ void display() {
 
             glmDraw(bot, GLM_MATERIAL | GLM_TEXTURE);
 
-            glPushMatrix();///¥ª¤j»L
+            glPushMatrix();///å·¦å¤§è…¿
                 glTranslatef(-2.000 , +14.100 , 0 );
                 glRotatef(angle[5], 0, 1, 0);
                 glRotatef(angle2[5], 1, 0, 0);
@@ -173,7 +142,7 @@ void display() {
                 glPopMatrix();
             glPopMatrix();
 
-            glPushMatrix();///¥k¤j»L
+            glPushMatrix();///å³å¤§è…¿
                 glTranslatef(+2.000 , +14.100 , 0 );
                 glRotatef(angle[8], 0, 1, 0);
                 glRotatef(angle2[8], 1, 0, 0);
@@ -198,8 +167,8 @@ void display() {
             glPopMatrix();
 
         glPopMatrix();
-        glColor3f(0,1,0);///¤¤¤ßÂIªº¦ì¸m
-        glutSolidTeapot( 0.01 );///¤¤¤ßÂIªº¦ì¸m
+        glColor3f(0,1,0);///ä¸­å¿ƒé»çš„ä½ç½®
+        glutSolidTeapot( 0.01 );///ä¸­å¿ƒé»çš„ä½ç½®
     glPopMatrix();
 
     glutSwapBuffers();

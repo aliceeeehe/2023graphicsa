@@ -23,8 +23,8 @@ void display() {
         glutSolidTeapot( 0.3 );
     glPopMatrix();
 
-    glColor3f(0,1,0);
-    glutSolidTeapot( 0.01 );
+    glColor3f(0,1,0);///旋轉中心的顏色
+    glutSolidTeapot( 0.01 );///旋轉中心大小
 
     glutSwapBuffers();
 }
